@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>RPG Game</title>
+
+  <!-- Added link to the jQuery Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <!-- Added a link to Bootstrap-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+  <!-- Added a link to Javascript -->
+  <script type="text/javascript" src="assets/javascript/game.js"></script>
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+        <div class = "col-md-2">
+            <button type="button" id="start" class="btn btn-primary">Start Game!</button>
+        </div>        
+        <div class = "col-md-8 text-center">
+            <h1> Wizard's Duel! </h1>
+        </div>
+        <div class = "col-md-2"></div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-6 text-center"><h2>Choose your Witch or Wizard</h2></div>
+            <div class="col-md-6 text-center"><h2>Choose your Death Eater</h2></div>
+        </div>
+        <div class="row">
+            <div class ="col-md-6 text-center" id="wiz-images">
+            </div>
+            <div class ="col-md-6 text-center" id="DE-images"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6 text-center" ><h2>Choose your spell:</h2></div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6 text-center"  id="spell-images">Spell icons go here.</div>
+        </div>
+        <div class="row">
+                <div class="col-md-5">
+                    <div class="progress">
+                        <div class="progress-bar bg-info" id="wizHP" role="progressbar" style="width: 100%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">Hit Points</div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-danger">Attack!</button>                 
+                </div>
+                <div class="col-md-5 img-rounded">
+                    <div class="progress">
+                        <div class="progress-bar bg-info" id="wizHP" role="progressbar" style="width: 100%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">Hit Points</div>
+                    </div>
+                </div>
+        </div>
+        <div class="row">
+                <div class="col-md-5 img-rounded" id="active-wiz">active wizard</div>
+                <div class="col-md-2 img-rounded">
+                    <div id="active-spell">
+                        active spell
+                    </div>                  
+                </div>
+                <div class="col-md-5 img-rounded" id="active-DE">active death eater</div>
+        </div>
+    </div>  
+
+</body>
+
+</html>
