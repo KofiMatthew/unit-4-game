@@ -1,1 +1,3 @@
 # unit-4-game
+
+I was having the toughest time with this assignment until we practiced a number of these elements Thursday evening (the day before yesterday).  I felt like there ought to be a way to combine elements from both the homework challenges to make a more interesting game.  Given more time I would make it prettier and dial in some of the values to get the right balance of variety and challenge while keeping it winnable.  I welcome your feedback.

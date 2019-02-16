@@ -180,7 +180,8 @@ let duel = function () {
     if (FoeHP <= 0) {
         winCount++
         if (winCount == 4){
-            gameComplete()
+            gameComplete();
+            return;
         }
         else if (winCount >= 2) {
         $('#active-wiz').html("<img src=assets/images/" + wizard + 2 + ".jpg class='rounded mx-auto d-block spell-images' id=" + wizard +  " width = '400px' height='400px'>");
