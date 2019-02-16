@@ -15,6 +15,13 @@
   <script type="text/javascript" src="assets/javascript/game.js"></script>
 
 </head>
+<style>
+    body {
+        background-color: black;
+        color: whitesmoke;
+    }
+
+</style>
 
 <body>
     <div class="container">
@@ -42,32 +49,28 @@
             <div class="col-md-6 text-center" ><h2>Choose your spell:</h2></div>
         </div>
         <div class="row">
-            <div class="col-md-3"></div>
-            <div class="col-md-6 text-center"  id="spell-images">Spell icons go here.</div>
+            <div class="col-md-1"></div>
+            <div class="col-md-10"  id="spell-images"></div>
         </div>
         <div class="row">
                 <div class="col-md-5">
                     <div class="progress">
-                        <div class="progress-bar bg-info" id="wizHP" role="progressbar" style="width: 100%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">Hit Points</div>
+                        <div class="progress-bar bg-success" id = "wizHP" role="progressbar" style="width: 100%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <button type="button" class="btn btn-danger">Attack!</button>                 
+                    <button type="button" id = attackBtn class="btn btn-danger">Attack!</button>                 
                 </div>
                 <div class="col-md-5 img-rounded">
                     <div class="progress">
-                        <div class="progress-bar bg-info" id="wizHP" role="progressbar" style="width: 100%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">Hit Points</div>
+                        <div class="progress-bar bg-info" id="foeHP" role="progressbar" style="width: 100%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">Hit Points</div>
                     </div>
                 </div>
         </div>
         <div class="row">
-                <div class="col-md-5 img-rounded" id="active-wiz">active wizard</div>
-                <div class="col-md-2 img-rounded">
-                    <div id="active-spell">
-                        active spell
-                    </div>                  
-                </div>
-                <div class="col-md-5 img-rounded" id="active-DE">active death eater</div>
+                <div class="col-md-5" id="active-wiz"></div>
+                <div class="col-md-2" id="active-spell"></div>
+                <div class="col-md-5" id="active-DE"></div>
         </div>
     </div>  
 
