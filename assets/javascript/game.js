@@ -5,6 +5,7 @@ var spell;
 var chosenFoe;
 var isWizChosen = false;
 var isFoeChosen = false;
+var isSpellChosen = false;
 var activeSpell;
 var activeWizard;
 var count = 1;
@@ -13,8 +14,10 @@ var activeMin;
 var activeMax;
 var growth;
 var HP;
+var HPbase;
 var lifeBar;
 var FoeHP;
+var FoeHPbase;
 var foeLifeBar;
 
 var expel;
@@ -23,36 +26,37 @@ var sect;
 var petr;
 var foeMin;
 var foeMax;
+var winCount = 0;
 
 // Wizards:
 var wizArray = [
     {
         name: "Luna",
         baseMin: 1,
-        baseMax: 30,
+        baseMax: 25,
         attackGrowth: 0.1,
-        HP: 150,
+        HP: 200,
     },
     {
         name: "Ron",
         baseMin: 1,
-        baseMax: 35,
+        baseMax: 30,
         attackGrowth: .08,
-        HP: 175,
+        HP: 190,
     },
     {
         name: "Hermoine",
         baseMin: 10,
-        baseMax: 50,
+        baseMax: 30,
         attackGrowth: .15,
-        HP: 100
+        HP: 180,
     },
     {
         name: "Harry",
         baseMin: 5,
-        baseMax: 40,
+        baseMax: 30,
         attackGrowth: .1,
-        HP: 125,
+        HP: 175,
     }]
 
 // Foes:
@@ -69,7 +73,7 @@ var foeArray = [
 },{
 
     name: "Peter",
-    HP: 90,
+    HP: 70,
     min: 10,
     max: 35,
     expel: 1.2,
@@ -78,7 +82,7 @@ var foeArray = [
     petr: 1.15,
 },{
     name: "Bellatrix",
-    HP: 120,
+    HP: 80,
     min: 10,
     max: 40,
     expel: 1.2,
@@ -87,7 +91,7 @@ var foeArray = [
     petr: 1,
 },{
     name: "Voldemort",
-    HP: 150,
+    HP: 90,
     min: 15,
     max: 50,
     expel: 1.25,
@@ -138,34 +142,77 @@ function randomnumber(min, max) {
     return (Math.floor(Math.random() * (max - min + 1) + min));
 };
 
-//attack function - calculates the attack power and adjusts hit points (and display).  If hit points zero, sends to win or loss function
+//attack function - calculates the attack power and adjusts hit points (and display).  If hit points zero, sends to win or lose function
 let duel = function () {
+    var counterAttack = randomnumber(foeMin, foeMax);
+    console.log("foe attack: " + counterAttack);
+    HP = Math.floor(HP - counterAttack);
+    console.log("Wiz HP: " + HP);
+    $('#foeMove').text(foe + ' attacks ' + wizard + ' for ' + counterAttack + ' hit points.');
+    lifeBar = Math.floor(((HP)/HPbase)*100);
+    console.log("wiz life bar: " + lifeBar);
+    console.log("wiz HP base: " + HPbase);
+    $('.bg-success').width(lifeBar + "%");
+    $('.bg-success').text(lifeBar + "%");
+
     var attack = randomnumber(activeMin, activeMax);
     console.log("base attack: " + attack);
-    attack = (attack * (growth * count + 1) * activeSpell);
+    attack = Math.floor((attack * (growth * count + 1) * activeSpell));
     console.log("final attack: " + attack);
     FoeHP = Math.floor(FoeHP - attack);
-    foeLifeBar = Math.floor(((FoeHP - attack)/FoeHP)*100);
     console.log("Foe HP: " + FoeHP);
+    $('#wizMove').text(wizard + ' attacks ' + foe + ' for ' + attack + ' hit points.');
+    foeLifeBar = Math.floor(((FoeHP)/FoeHPbase)*100);
+    console.log("foe life bar: " + foeLifeBar);
+    console.log("foe HP base: " +FoeHPbase);
     $('.bg-info').width(foeLifeBar + "%");
     $('.bg-info').text(foeLifeBar + "%");
-
     count++
-
     
-    /* $('div#somediv').width('70%'); */
+    if (HP <= 0) {
+        gameOver()
+    }
+    if (FoeHP <= 0) {
+        winCount++
+        if (winCount >= 4){
+            gameComplete()
+        }
+        if (winCount >= 2) {
+        $('#active-wiz').html("<img src=assets/images/" + wizard + 2 + ".jpg class='rounded mx-auto d-block spell-images' id=" + wizard +  " width = '400px' height='400px'>");
+        }
+        gameCont()
+    }
+}
 
+let gameCont = function() {
+    isFoeChosen = false;
+    $('#active-DE').hide('#' + foe);
+    $('#wizMove').text(wizard + ' has defeated ' + foe + '!');
+    $('#foeMove').text('Choose another opponent');
+    $('.btn-danger').attr("disabled", "disabled");
 
-    /* var basepower = randomnumber([[wizard][baseAttack[0]]],[[wizard][baseAttack[1]]]); */
+}
 
-    /*  */
-  /*   var spellPower = [foeArray[foe].[];
-    console.log(spellPower);
-    var attack1 = (basePower)*(spellPower);
-    console.log(attack1);
-    alert(wizard+" attacked "+foe+" with "+spell+" for "+attack1+" hit points."); */
-};
-/* duel() */
+let gameOver = function() {
+    $('#active-wiz').hide('#' + wizard);
+    $('#active-DE').hide('#' + foe);
+    $('#active-spell').hide('#' + spell);
+    $('#active-wiz').html("<img src=assets/images/cemetery.jpg class='rounded mx-auto d-block spell-images' id='cemetery'  width = 'auto' height='400px'>");
+    $('#active-wiz').show('#cemetery');
+    $('#wizMove').text(wizard + ' has been defeated by ' + foe + '!');   
+    setTimeout(refresh,10000);
+    function refresh () {
+        location.reload();
+    }    
+}
+
+let gameComplete = function () {
+    $('#wizMove').text(wizard + ' has defeted all the Death Eaters!!!');
+    setTimeout(refresh,3000)
+    function refresh () {
+        location.reload();
+    }    
+}
 
 //win function - displays message, animates win, allows for new opponent selection
 //lose function - displays message, animates loss, allows for new game
@@ -211,12 +258,16 @@ $(document).ready(function(){
             growth = activeWizard.attackGrowth;
             console.log("Growth: " + growth);
             HP = activeWizard.HP;
+            HPbase = activeWizard.HP;
+            lifeBar = "100";
             console.log("HP: " + HP);
 
         
         $('#' + wizard).hide();
         $('#active-wiz').html("<img src=assets/images/" + wizard + 1 + ".jpg class='rounded mx-auto d-block spell-images' id=" + wizard +  " width='400px' height='300px'>");
         isWizChosen = true;
+        $('.bg-success').width(lifeBar + "%");
+        $('.bg-success').text(lifeBar + "%");
         }
     });
 
@@ -249,6 +300,8 @@ $(document).ready(function(){
             petr = chosenFoe.petr;
             console.log("Petr: " + petr);
             FoeHP = chosenFoe.HP;
+            FoeHPbase = chosenFoe.HP;
+            foeLifeBar = "100";
             console.log("HP: " + HP);
             foeMin = chosenFoe.min;
             console.log("Foe Min: " + foeMin);            
@@ -257,7 +310,12 @@ $(document).ready(function(){
 
         $('#' + foe).hide();
         $('#active-DE').html("<img src=assets/images/" + foe + ".jpg class='rounded mx-auto d-block spell-images' id=" + foe +  " width='250px' height='300px'>");
+        $('#active-DE').show('#' + foe);
+
         isFoeChosen = true;
+        $('.btn-danger').removeAttr("disabled");
+        $('.bg-info').width(foeLifeBar + "%");
+        $('.bg-info').text(foeLifeBar + "%");
     }});
 
     $('#spell-images').on('click', function(event) {
@@ -280,11 +338,17 @@ $(document).ready(function(){
                     break;
                 }
             $('#active-spell').html("<img src=assets/images/" + spell + ".gif class='rounded mx-auto d-block spell-images' id=" + spell +  " width='200px' height='150px'>");
+            isSpellChosen = true;
             }
             });
 
 $('#attackBtn').on('click', function(event) {
+    if (isSpellChosen === true){
     duel();
+    }
+    else {
+    $('#wizMove').text('Select a spell to attack with.');
+    }
 });
 });
 
