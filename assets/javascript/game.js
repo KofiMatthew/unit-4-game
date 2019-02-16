@@ -1,32 +1,37 @@
 // Global variables:
-var wizard;
-var foe;
-var spell;
-var chosenFoe;
-var isWizChosen = false;
-var isFoeChosen = false;
-var isSpellChosen = false;
-var activeSpell;
-var activeWizard;
-var count = 1;
 
+//wizard oriented variables
+var wizard;
+var isWizChosen = false;
+var activeWizard;
 var activeMin;
 var activeMax;
 var growth;
 var HP;
 var HPbase;
 var lifeBar;
+var winCount = 0;
+
+//foe Death Eater oriented variables
+var foe;
+var chosenFoe;
+var isFoeChosen = false;
+var activeSpell;
+var count = 1;
+var foeMin;
+var foeMax;
 var FoeHP;
 var FoeHPbase;
 var foeLifeBar;
 
+//spell oriented variables
+var isSpellChosen = false;
+var spell;
 var expel;
 var conf;
 var sect;
 var petr;
-var foeMin;
-var foeMax;
-var winCount = 0;
+
 
 // Wizards:
 var wizArray = [
@@ -39,21 +44,21 @@ var wizArray = [
     },
     {
         name: "Ron",
-        baseMin: 1,
+        baseMin: 3,
         baseMax: 30,
         attackGrowth: .08,
         HP: 190,
     },
     {
         name: "Hermoine",
-        baseMin: 10,
+        baseMin: 5,
         baseMax: 30,
         attackGrowth: .15,
         HP: 180,
     },
     {
         name: "Harry",
-        baseMin: 5,
+        baseMin: 1,
         baseMax: 30,
         attackGrowth: .1,
         HP: 175,
@@ -66,38 +71,38 @@ var foeArray = [
     HP: 60,
     min: 5,
     max: 25,
-    expel: 1.25,
-    conf: 1,
-    sect: 1.15,
-    petr: 1.25,
+    expel: 1.75,
+    conf: 1.5,
+    sect: 1.25,
+    petr: 1.15,
 },{
 
     name: "Peter",
     HP: 70,
     min: 10,
     max: 35,
-    expel: 1.2,
-    conf: 1,
-    sect: 1.25,
-    petr: 1.15,
+    expel: 1.5,
+    conf: 1.25,
+    sect: 1.15,
+    petr: 1.75,
 },{
     name: "Bellatrix",
     HP: 80,
     min: 10,
     max: 40,
-    expel: 1.2,
-    conf: 1.25,
-    sect: 1.15,
-    petr: 1,
+    expel: 1.25,
+    conf: 1.15,
+    sect: 1.75,
+    petr: 1.5,
 },{
     name: "Voldemort",
     HP: 90,
-    min: 15,
-    max: 50,
-    expel: 1.25,
-    conf: 1,
-    sect: 1.2,
-    petr: 1.15,
+    min: 10,
+    max: 45,
+    expel: 1.15,
+    conf: 1.75,
+    sect: 1.5,
+    petr: 1.25,
 }]
 
 spells = [{
@@ -116,7 +121,7 @@ var deatheaterArray = ['assets/images/Draco.jpg', 'assets/images/Peter.jpg', 'as
 var spellArray = ['assets/images/expel.gif', 'assets/images/conf.gif', 'assets/images/sect.gif', 'assets/images/petr.gif']
 
 
-//Okay, so I was originally planning for a single loop to populate all the images.  But then I realized that I wanted different classes for each group of images.
+//Okay, so I was originally planning for a single loop to populate all the images.  But then I realized that I wanted different classes applied to each group of images.
 //So of course I could simplify the code below and specifically list the arrays that I'm using.  Still, it was a lot of work for me to make it work, and I'm leaving it.
 
 function displayWiz(Array, ID, ref) {
@@ -142,7 +147,7 @@ function randomnumber(min, max) {
     return (Math.floor(Math.random() * (max - min + 1) + min));
 };
 
-//attack function - calculates the attack power and adjusts hit points (and display).  If hit points zero, sends to win or lose function
+//duel function - calculates the attack power and adjusts hit points (and display).  If hit points zero, sends to win or lose function
 let duel = function () {
     var counterAttack = randomnumber(foeMin, foeMax);
     console.log("foe attack: " + counterAttack);
@@ -174,16 +179,17 @@ let duel = function () {
     }
     if (FoeHP <= 0) {
         winCount++
-        if (winCount >= 4){
+        if (winCount == 4){
             gameComplete()
         }
-        if (winCount >= 2) {
+        else if (winCount >= 2) {
         $('#active-wiz').html("<img src=assets/images/" + wizard + 2 + ".jpg class='rounded mx-auto d-block spell-images' id=" + wizard +  " width = '400px' height='400px'>");
         }
         gameCont()
     }
 }
 
+//win function - displays message, animates win, allows for new opponent selection
 let gameCont = function() {
     isFoeChosen = false;
     $('#active-DE').hide('#' + foe);
@@ -193,6 +199,7 @@ let gameCont = function() {
 
 }
 
+//lose function - displays message, animates loss, allows for new game
 let gameOver = function() {
     $('#active-wiz').hide('#' + wizard);
     $('#active-DE').hide('#' + foe);
@@ -206,19 +213,14 @@ let gameOver = function() {
     }    
 }
 
+//victory function - all foes defeated 
 let gameComplete = function () {
     $('#wizMove').text(wizard + ' has defeted all the Death Eaters!!!');
-    setTimeout(refresh,3000)
+    setTimeout(refresh,5000)
     function refresh () {
         location.reload();
     }    
 }
-
-//win function - displays message, animates win, allows for new opponent selection
-//lose function - displays message, animates loss, allows for new game
-//reset function - empties variables, counters, resets display
-//victory function - all foes defeated 
-
 
 //Activators:
 $(document).ready(function(){
@@ -231,6 +233,7 @@ $(document).ready(function(){
         $('#start').attr("disabled", "disabled");
        });
 
+    //function for the selection of wizard on click event
     $("#wiz-images").on('click', function(event) {
         if (isWizChosen != true) {        
             wizard = (event.target.id);
@@ -270,7 +273,7 @@ $(document).ready(function(){
         $('.bg-success').text(lifeBar + "%");
         }
     });
-
+    //function for the selection of foe or Death Eater
     $('#DE-images').on('click', function(event) {
         if (isFoeChosen != true) {
         foe = (event.target.id);
@@ -318,6 +321,7 @@ $(document).ready(function(){
         $('.bg-info').text(foeLifeBar + "%");
     }});
 
+    //function for the selection of spell
     $('#spell-images').on('click', function(event) {
         if (isFoeChosen === true) {
             spell = (event.target.id);
@@ -341,7 +345,7 @@ $(document).ready(function(){
             isSpellChosen = true;
             }
             });
-
+//function for what happens when the attack button is clicked
 $('#attackBtn').on('click', function(event) {
     if (isSpellChosen === true){
     duel();
@@ -351,12 +355,3 @@ $('#attackBtn').on('click', function(event) {
     }
 });
 });
-
-
-
-//listener for selection of the wizard - animates wizard on stage
-
-
-//listener for selection of foe - animates foe on stage
-
-//listener for Wizards duel - locks wizard and foe selection.  Calls attack function.  Animate wand blast?
